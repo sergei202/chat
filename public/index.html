@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Angular Starter</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="app.js"></script>
+		<style>
+			body {margin-top:20px;}
+		</style>
+	</head>
+
+	<body ng-app="app">
+		<div class="container">
+
+			<div class="panel panel-default" ng-controller="ChatCtrl">
+				<div class="panel-heading">
+					<h3 class="panel-title">Chat Controller</h3>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<label>Name</label>
+						<input class="form-control" ng-model="name">
+					</div>
+
+					<div ng-if="name">
+						<ul class="list-group">
+							<li class="list-group-item" ng-repeat="message in messages">
+								<b>{{message.name}}:</b>
+								{{message.text}}
+								<div class="pull-right text-muted">{{message.date | date: 'mediumTime'}}</div>
+							</li>
+						</ul>
+
+						<div class="input-group">
+							<input class="form-control" ng-model="newMessage.text">
+							<span class="input-group-btn">
+								<button class="btn btn-primary" ng-click="send()" ng-disabled="!newMessage.text.length">Send</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
