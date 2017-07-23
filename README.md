@@ -1,14 +1,11 @@
-Angular Starter
+Chat App
 ====
 
-This angular-starter repo contains:
-- Express node backend
-- `bodyParser` for handling POST requests
-- AngularJS
-- Bootstrap
+Full chat application example.
 
 To setup:
 
 - Clone this repo
 - `npm install`
 - `node server.js`
+- Open couple brower tabs at [http://localhost:3000](http://localhost:3000)
