@@ -2,6 +2,17 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+
+mongoose.connect('mongodb://localhost/chat', {useMongoClient:true});
+
+var Message = mongoose.model('Message', {
+	name: String,
+	text: String,
+	date: Date
+});
+
 
 var app = express();
 
@@ -17,20 +28,28 @@ app.listen(3000, function(err) {
 });
 
 
-var messages = [
-	{name:'Server', text:'Node server started', date:new Date()},
-];
+function getMessages() {
+	return Message
+		.find()					// Get all messages
+		.sort({date:-1})		// Sort by date descending
+		.limit(10)				// Get the last 10 documents
+		.exec().then(function(msgs) {
+			return msgs.reverse();	// Reverse the array over (so last message is on the bottom)
+		});
+}
 
-// This block adds 100 messages to show that we really are getting the last 10
-// for(var i=0;i<100;i++) {
-// 	messages.push({name:'Repeat', text:'Message #' + i, date:new Date()});
-// }
+function saveMessage(msg) {
+	// Create a new message document, save it and return the promise
+	return new Message(msg).save();
+}
 
 
 // Route to get all the messages
 app.get('/messages', function(req,res) {
-	// Show only the last 10 messages
-	res.json(messages.slice(-10));
+	// Get our messages and send back to the user
+	getMessages().then(function(msgs) {
+		res.json(msgs);
+	});
 });
 
 
@@ -38,7 +57,9 @@ app.get('/messages', function(req,res) {
 app.post('/message', function(req,res) {
 	var message = req.body;
 	console.log('/message: ', message);
-	messages.push(message);
-	// Show only the last 10 messages
-	res.json(messages.slice(-10));
+
+	// Save our message and then return
+	saveMessage(message).then(function() {
+		res.json(message);
+	});
 });

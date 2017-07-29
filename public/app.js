@@ -29,9 +29,7 @@ angular.module('app').controller('ChatCtrl', function($scope,$http,$interval) {
 		// POST newMessage to the backend
 		$http.post('/message', $scope.newMessage).then(function(res) {
 			console.log('/message: ', res.data);
-			// res.data contains the new message list.
-			// This prevents us from having to call refresh()
-			$scope.messages = res.data;
+			refresh();
 		});
 
 		// Reset newMessage to clear the last text
